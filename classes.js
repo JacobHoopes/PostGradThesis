@@ -1,30 +1,53 @@
 
 class Thing {
-    constructor(x, y, diameter, velX, velY) {
+    constructor(x, y, w, h) {
         this.x = x;
         this.y = y;
-        this.diameter = diameter;
-        this.velX = velX;
-        this.velY = velY;
+        this.w = w;
+        this.h = h;
+        this.parent = 'none';
+        this.over = false;
+        this.selected = false;
+        this.color = [200,200,200];
+        this.mouseDiffX = 20;
+        this.mouseDiffY = 20;
     }
+    
 
-    adjust() {
-        if (this.x - this.diameter/2 < 0) {
-            this.velX = abs(this.velX);
-        } else if (this.x + this.diameter/2 > width) {
-            this.velX = -abs(this.velX);
-        }
-        if (this.y - this.diameter/2 < 0) {
-            this.velY = abs(this.velY);
-        } else if (this.y + this.diameter/2 > height) {
-            this.velY = -abs(this.velY);
+    update() {
+        // if (mousePressed && this.over) {
+        //     this.selected = true;
+        // }
+        if (!mouseIsPressed) {
+            this.selected = false;
         }
         
-        this.x = this.x+this.velX;
-        this.y = this.y+this.velY;
+        if (this.selected) {
+            this.x = mouseX - this.mouseDiffX;
+            this.y = mouseY - this.mouseDiffY;
+        } else {
+            this.mouseDiffX = mouseX - this.x;
+            this.mouseDiffY = mouseY - this.y;
+        }
     }
     
     display() {
-        ellipse(this.x, this.y, this.diameter)
+        stroke(0);
+        strokeWeight(3);
+        fill(150);
+        if (this.selected) {
+            fill(0,255,255);
+        } else if (this.over) {
+            fill(255,0,0);
+        }
+        rect(this.x, this.y, this.w, this.h);
+    }
+
+    over() {
+        return this.over;
+    }
+
+    setOver(bool) {
+        this.over = bool;
     }
 }
